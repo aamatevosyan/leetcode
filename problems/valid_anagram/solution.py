@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import Counter
 
 class Solution:
     def countCharacters(self, s):
@@ -12,13 +12,15 @@ class Solution:
         if len(s) != len(t):
             return False
 
-        one, two = self.countCharacters(s), self.countCharacters(t)
+        sCounter = Counter(s)
 
-        if len(one) != len(two):
-            return False
-        
-        for k in one:
-            if one[k] != two[k]:
+        for el in t:
+            if not el in sCounter:
                 return False
-        
+            
+            sCounter.update({ el: -1 })
+
+            if sCounter[el] < 0:
+                return False
+
         return True
