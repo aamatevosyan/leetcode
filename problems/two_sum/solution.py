@@ -1,10 +1,14 @@
+from collections import Counter
+
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        numDict = {}
+        num_indexes = {}
 
-        for i in range(len(nums)):
-            numDict[nums[i]] = i
+        for i, num in enumerate(nums):
+            num_indexes[num] = i
 
-        for i in range(len(nums)):
-            if (target - nums[i]) in numDict and i != numDict[target - nums[i]]:
-                return [i, numDict[target - nums[i]]]
+        for i, num in enumerate(nums):
+            to_search = target - num
+
+            if to_search in num_indexes and i != num_indexes[to_search]:
+                return [i, num_indexes[to_search]]
