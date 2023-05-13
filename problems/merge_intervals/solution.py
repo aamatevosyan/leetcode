@@ -3,23 +3,18 @@ class Solution:
         if len(intervals) == 0:
             return []
 
-        start, end = 0, 1
-
-        intervals.sort(key=lambda x: x[start])
-
-        cur_start, cur_end = intervals[0][start], intervals[0][end]
+        intervals.sort(key=lambda x: x[0])
+        _start, _end = intervals[0]
 
         merged = []
-        for i in range(1, len(intervals)):
-            interval = intervals[i]
 
-            if interval[start] <= cur_end:
-                cur_end = max(cur_end, interval[end])
+        for start, end in intervals[1:]:
+            if start <= _end:
+                _end = max(_end, end)
             else:
-                merged.append([cur_start, cur_end])
-                cur_start = interval[start]
-                cur_end = interval[end]
+                merged.append([_start, _end])
+                _start, _end = start, end
         
-        merged.append([cur_start, cur_end])
+        merged.append([_start, _end])
 
         return merged 
