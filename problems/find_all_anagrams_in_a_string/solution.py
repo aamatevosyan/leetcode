@@ -1,37 +1,26 @@
-class Solution:
-    def countCharacters(self, s):
-        counts = defaultdict(int)
-        for c in s:
-            counts[c] += 1
-        
-        return counts
+from collections import Counter
 
+class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
-        counts = self.countCharacters(p)
-        start, n = 0, len(p)
+        anagramCharCounts = Counter(p)
+        l, n = 0, len(p)
         results = []
 
-        localCount = defaultdict(int)
+        windowCharCounts = defaultdict(int)
 
-        for end in range(len(s)):
-            end_char = s[end]
-            localCount[end_char] += 1
+        for r in range(len(s)):
+            c = s[r]
+            windowCharCounts[c] += 1
             
-            if end - start + 1 == n:
-                flag = False
+            if r - l + 1 == n:
+                if windowCharCounts == anagramCharCounts:
+                    results.append(l)
+                
+                t = s[l]
+                windowCharCounts[t] -= 1
 
-                if len(localCount) == len(counts):
-                    for k in counts:
-                        if k not in localCount or localCount[k] != counts[k]:
-                            flag = True
-                            break
-                
-                    if not flag:
-                        results.append(start)
-                
-                localCount[s[start]] -= 1
-                if localCount[s[start]] == 0:
-                    localCount.pop(s[start])
-                start += 1
+                if windowCharCounts[t] == 0:
+                    windowCharCounts.pop(t)
+                l += 1
         
         return results
