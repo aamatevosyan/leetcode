@@ -1,28 +1,26 @@
+from collections import Counter
+
 class Solution:
-    def countCharacters(self, s):
-        counts = defaultdict(int)
-        for c in s:
-            counts[c] += 1
+    def countCharacters(self, s: str) -> str:
+        charCounts = Counter(s)
         
         result = ''
-        for key, count in sorted(counts.items()):
-            for i in range(count):
-                result += key
+        for key, count in sorted(charCounts.items()):
+            result += key * count
         
         return result
 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        anagrams_dict = {}
-        groups = []
+        anagrams, groups = {}, []
 
         for s in strs:
-            c = self.countCharacters(s)
+            normalized = self.countCharacters(s)
             
-            if not c in anagrams_dict:
+            if not normalized in anagrams:
                 groups.append([])
-                anagrams_dict[c] = len(groups) - 1
+                anagrams[normalized] = len(groups) - 1
             
-            groups[anagrams_dict[c]].append(s)
+            groups[anagrams[normalized]].append(s)
 
 
         return groups
