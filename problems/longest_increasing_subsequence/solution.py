@@ -1,10 +1,14 @@
+from bisect import bisect_left
+
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        memo = [1] * len(nums)
+        seq = []
 
-        for i in range(len(nums)):
-            for j in range(i):
-                if nums[j] < nums[i]:
-                    memo[i] = max(memo[i], memo[j] + 1)
-        
-        return max(memo)
+        for num in nums:
+            if len(seq) == 0 or seq[-1] < num:
+                seq.append(num)
+            else:
+                ind = bisect_left(seq, num)
+                seq[ind] = num
+
+        return len(seq)
