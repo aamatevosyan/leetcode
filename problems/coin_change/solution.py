@@ -5,25 +5,23 @@ class Solution:
         if amount == 0:
             return 0
 
-        result = amount
-
         coins = sorted(coins, key=lambda x: -x)
-        visited = set([0])
+        memo = [-1] * (amount + 1)
 
-        q = deque()
-        q.append((0, 0))
-        visited.add(0)
+        q = deque([0])
+        memo[0] = 0
 
         while q:
-            curr, cnt = q.popleft()
+            i = q.popleft()
 
             for coin in coins:
-                if curr + coin == amount:
-                    return cnt + 1
-                elif curr + coin > amount or curr + coin in visited:
+                if i + coin > amount or memo[i + coin] >= 0:
                     continue
-                else:
-                    q.append((curr + coin, cnt + 1))
-                    visited.add(curr + coin)
+
+                if i + coin == amount:
+                    return memo[i] + 1 
+                
+                q.append(i + coin)
+                memo[i + coin] = memo[i] + 1
 
         return -1
