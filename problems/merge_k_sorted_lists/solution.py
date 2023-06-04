@@ -1,4 +1,4 @@
-from heapq import heappush, heappop
+from queue import PriorityQueue
 
 # Definition for singly-linked list.
 # class ListNode:
@@ -6,33 +6,31 @@ from heapq import heappush, heappop
 #         self.val = val
 #         self.next = next
 
-class Node:
-    def __init__(self, node):
-        self.node = node
-    
-    def __lt__(self, other):
-        return self.node.val < other.node.val
+class Node(ListNode):
+    @classmethod
+    def wrap(cls, node: 'ListNode'):
+        return cls(val=node.val, next=node.next)
+
+    def __lt__(self, other: 'Node'):
+        return self.val < other.val
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        minHeap = []
+        curr = head = ListNode()
+        heap = PriorityQueue()
 
-        for root in lists:
-            if root:
-                heappush(minHeap, Node(root))
-        
-        head, tail = None, None
-        while minHeap:
-            node = heappop(minHeap).node
+        for node in lists:
+            if node:
+                heap.put(Node.wrap(node))
 
-            if not head:
-                head = tail = node
-            else:
-                tail.next = node
-                tail = tail.next
-            
+        while not heap.empty():
+            node = heap.get()
+            curr.next = ListNode(node.val)
+            curr = curr.next
+
             if node.next:
-                heappush(minHeap, Node(node.next))
+                heap.put(Node.wrap(node.next))
 
-        return head
+        return head.next
+
         
