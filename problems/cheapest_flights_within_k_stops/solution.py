@@ -1,37 +1,28 @@
-from collections import defaultdict, deque
+from heapq import heappush, heappop
 
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        graph = defaultdict(list)
+        graph, q = [[] for _ in range(n)], [(0, src, k + 1)]
+        prices = [[math.inf] * (k + 2) for _ in range(n)]
 
-        for _src, _dst, _price in flights:
-            graph[_src].append((_dst, _price))
+        for u, v, w in flights:
+            graph[u].append((v, w))
         
-        if not graph[src]:
-            return -1
-        
-        q, minPrice = deque([(src, 0)]), float("inf")
-        prices = [float("inf")] * n
-
-        k += 1
-
-        while k >= 0 and q:
-            _len = len(q)
-
-            for _ in range(_len):
-                node, price = q.popleft()
-
-                if prices[node] <= price:
-                    continue
-                
-                prices[node] = price
-
-                if node == dst and minPrice > price:
-                    minPrice = price
-
-                for _node, _price in graph[node]:
-                    q.append((_node, price + _price))         
+        while q:
+            cost, u, stops = heappop(q)
             
-            k -= 1
+            if u == dst:
+                return cost
+                        
+            if stops <= 0:
+                continue
+            
+            for v, w in graph[u]:
+                new_cost = cost + w
+                if new_cost < prices[v][stops - 1]:
+                    prices[v][stops - 1] = new_cost
+                    heappush(q, (new_cost, v, stops - 1))  
+
+        return -1
+            
         
-        return -1 if isinf(minPrice) else minPrice
