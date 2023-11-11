@@ -1,16 +1,16 @@
-from collections import defaultdict
-
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        mapper, result, _sum = defaultdict(int), 0, 0
-        mapper[0] = 1
-
+        num_count, prefix_sum, cnt = { 0: 1 }, 0, 0
+        
         for num in nums:
-            _sum += num
+            prefix_sum += num
 
-            if _sum - k in mapper:
-                result += mapper[_sum - k]
-            
-            mapper[_sum] += 1
+            if (prefix_sum - k) in num_count:
+                 cnt += num_count[prefix_sum - k]
 
-        return result
+            if prefix_sum not in num_count:
+                num_count[prefix_sum] = 1
+            else:
+                num_count[prefix_sum] += 1
+        
+        return cnt
