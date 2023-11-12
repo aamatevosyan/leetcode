@@ -1,38 +1,48 @@
 from collections import defaultdict
-from sortedcontainers import SortedSet
+
+class UnionFind:
+    def __init__(self, n: int):
+        self.rank = [0] * n
+        self.parents = list(range(n))
+    
+    def find(self, node: int) -> int:
+        parent = self.parents[node]
+
+        while parent !=  self.parents[parent]:
+            self.parents[parent] = self.parents[self.parents[parent]]
+            parent = self.parents[parent]
+        
+        return parent
+    
+    def union(self, node1: int, node2: int) -> bool:
+        parent1, parent2 = self.find(node1), self.find(node2)
+        
+        if parent1 == parent2:
+            return False
+
+        if self.rank[parent1] > self.rank[parent2]:
+            self.parents[parent2] = parent1
+        elif self.rank[parent1] < self.rank[parent2]:
+            self.parents[parent1] = parent2
+        else:
+            self.parents[parent2] = parent1
+            self.rank[parent1] += 1
 
 class Solution:
-    def dfs(self, accounts: List[List[str]], graph: Dict[str, List[int]], visited: Set[str], result: Set[str], i: int):
-        if visited[i]:
-            return
-
-        visited[i] = True
-        _, *emails = accounts[i]
-
-        for email in emails:
-            result.add(email)
-
-            for ind in graph[email]:
-                self.dfs(accounts, graph, visited, result, ind) 
-
-
     def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
-        visited = [False] * len(accounts)
-        graph = defaultdict(list)
-        result = []
+        union_find = UnionFind(len(accounts))
 
+        email_to_ind = {}
         for i, (_, *emails) in enumerate(accounts):
             for email in emails:
-                graph[email].append(i)
+                if email in email_to_ind:
+                    union_find.union(email_to_ind[email], i)
+                email_to_ind[email] = i
         
-        for i, account in enumerate(accounts):
-            if visited[i]:
-                continue
-            
-            name, emails = account[0], SortedSet()
-            self.dfs(accounts, graph, visited, emails, i) 
-            
-            result.append([name, *emails])
+        result_dict = defaultdict(list)
+        for email, ind in email_to_ind.items():
+            i = union_find.find(ind)
+            result_dict[i].append(email)
 
+        return [[accounts[i][0]] + sorted(emails) for i, emails in result_dict.items()]
         
-        return result
