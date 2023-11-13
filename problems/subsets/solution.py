@@ -1,18 +1,21 @@
 class Solution:
-    def helper(self, nums: List[int], ind: int, subset: List[int], result: List[List[int]]):
-        result.append(subset[:])
-
-        if len(subset) == len(nums):
-            return
-
-        for i in range(ind, len(nums)):
-            subset.append(nums[i])
-            self.helper(nums, i + 1, subset, result)
-            subset.pop()
-
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        result = []
-
-        self.helper(nums, 0, [], result)
+        curr_set, result = [], []
+        
+        self.helper(0, nums, curr_set, result)
 
         return result
+    
+    def helper(self, i: int, nums: List[int], curr_set: List[int], result: List[int]) -> None:
+        if (i == len(nums)):
+            result.append(curr_set[:])
+            return
+        
+        curr_set.append(nums[i])
+        self.helper(i + 1, nums, curr_set, result)
+        curr_set.pop()
+
+        self.helper(i + 1, nums, curr_set, result)
+
+
+        
