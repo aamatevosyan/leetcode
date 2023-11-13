@@ -1,16 +1,11 @@
 class Solution:
-    def permutate(self, current: List[str], containers: List[str], ind: int, result: List[str]):
-        if len(containers) == ind:
-            result.extend(current)
+    def helper(self, path: str, containers: List[str], i: int, result: List[str]):
+        if len(containers) == i:
+            result.append(path)
             return
         
-        tmp = []
-
-        for i in range(len(containers[ind])):
-            for j in range(len(current)):
-                tmp.append(current[j] + containers[ind][i])
-        
-        self.permutate(tmp, containers, ind + 1, result)
+        for j in range(len(containers[i])):
+            self.helper(path + containers[i][j], containers, i + 1, result)
         
 
     def letterCombinations(self, digits: str) -> List[str]:
@@ -21,6 +16,7 @@ class Solution:
         containers = [mappings[int(digit)] for digit in digits]
 
         result = []
-        self.permutate([""], containers, 0, result)
+        self.helper("", containers, 0, result)
 
         return result
+        
