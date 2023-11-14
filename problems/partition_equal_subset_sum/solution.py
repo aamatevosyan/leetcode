@@ -1,24 +1,29 @@
 class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        target = sum(nums)
-
-        if target % 2 != 0:
-            return False
-        
-        _sum, target = target, target // 2
-
-        dp = [False] * (_sum + 1)
+    def canParitionTarget(self, nums: List[int], target: int):
+        dp = [False] * (target + 1)
         dp[0] = True
 
-        currSum = 0
+        for i in range(len(nums)):
+            curr = [False] * (target + 1)
 
-        for num in nums:
-            currSum += num
-            for val in range(min(currSum, target) - num, -1, -1):
-                if dp[val]:
-                    dp[val + num] = True
+            for j in range(1, target + 1):
+                exclude = dp[j]
+                include = False
+                
+                if j - nums[i] >= 0:
+                    include = dp[j - nums[i]]
 
-            if dp[target]:
-                 return True
+                curr[j] = exclude or include
+
+            dp = curr
         
-        return False
+        return curr[target]
+
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+
+        if total & 1:
+            return False
+        
+        return self.canParitionTarget(nums, total >> 1)
+        
