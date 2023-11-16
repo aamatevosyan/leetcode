@@ -1,34 +1,23 @@
 class Solution:
-    def getPalindrome(self, s: str, l: int, r: int) -> Tuple[int, int] | None:
-        if r >= len(s) or s[l] != s[r]:
-            return None
+    def expand(self, s: str, i: int, j: int) -> Tuple[int, int, int]:
+        l, r = i, j
 
         while l >= 0 and r < len(s) and s[l] == s[r]:
             l -= 1
             r += 1
-        
-        return (l + 1, r - 1)
+
+        return (r - l - 1, l + 1, r - 1)
+
 
     def longestPalindrome(self, s: str) -> str:
-        maxLen, _l, _r = 0, 0, 0
+        l, r, max_len = 0, 0, 1
 
         for i in range(len(s)):
-            palindromIndexes = [
-                self.getPalindrome(s, i, i + 1),
-                self.getPalindrome(s, i, i),
-            ]
+            max_len, l, r = max(
+                (max_len, l, r),
+                self.expand(s, i, i),
+                self.expand(s, i, i + 1),
+            )
 
-            for palindromIndex in palindromIndexes:
-                if not palindromIndex:
-                    continue
-                
-                l, r = palindromIndex
-
-                if r - l + 1 > maxLen:
-                    maxLen = r - l + 1
-                    _l, _r = l, r
+        return s[l : r + 1]
         
-        return s[_l : _r + 1]
-
-
-            
