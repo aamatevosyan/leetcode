@@ -1,26 +1,24 @@
-from collections import Counter
-
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
-        anagramCharCounts = Counter(p)
-        l, n = 0, len(p)
-        results = []
+        pattern_count = Counter(p)
+        window_count = Counter()
 
-        windowCharCounts = defaultdict(int)
+        result, l = [], 0
 
         for r in range(len(s)):
-            c = s[r]
-            windowCharCounts[c] += 1
-            
-            if r - l + 1 == n:
-                if windowCharCounts == anagramCharCounts:
-                    results.append(l)
-                
-                t = s[l]
-                windowCharCounts[t] -= 1
+            window_count[s[r]] += 1
 
-                if windowCharCounts[t] == 0:
-                    windowCharCounts.pop(t)
+            if r - l + 1 == len(p):
+                if window_count == pattern_count:
+                    result.append(l)
+                
+                window_count[s[l]] -= 1
+                if window_count[s[l]] == 0:
+                    window_count.pop(s[l])
+                
                 l += 1
         
-        return results
+        return result
+
+        
+        
