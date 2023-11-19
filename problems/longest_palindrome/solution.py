@@ -1,20 +1,15 @@
-from collections import defaultdict
-
 class Solution:
     def longestPalindrome(self, s: str) -> int:
-        characterCounts, bonus, count = defaultdict(int), 0, 0
+        res, char_count = 0, Counter(s)
 
-        for c in s:
-            characterCounts[c] += 1
-        
-        for c in characterCounts:
-            charCount = characterCounts[c]
+        for _, cnt  in char_count.items():
+            mod = cnt % 2
 
-            if bonus == 0 and charCount % 2 == 1:
-                bonus = 1
+            if mod == 1 and res % 2 == 0:
+                res += 1
             
-            count += charCount // 2
+            res += cnt - mod
+
+        return res
+
         
-        return count * 2 + bonus
-
-
