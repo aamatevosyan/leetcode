@@ -1,38 +1,25 @@
-class Node:
-    def __init__(self, start: int, end: int):
-        self.start = start
-        self.end = end
-        self.left = None
-        self.right = None
-
 class MyCalendar:
 
     def __init__(self):
-        self.root = None
-    
-    @staticmethod
-    def insert(node: Optional[Node], start: int, end: int) -> (Node, bool):
-        if not node:
-            return Node(start, end), True
-
-        if node.start <= start < node.end or node.start < end <= node.end or (
-            start < node.start and end > node.end
-        ):
-            return node, False
-        
-        if start < node.start:
-            node.left, success = MyCalendar.insert(node.left, start, end)
-        else:
-            node.right, success = MyCalendar.insert(node.right, start, end)
-        
-        return node, success
-        
-
+        self.calendar = []
 
     def book(self, start: int, end: int) -> bool:
-        self.root, success = self.insert(self.root, start, end)
+        l, r = 0, len(self.calendar) - 1
 
-        return success
+        while l <= r:
+            m = l + (r - l) // 2
+
+            if self.calendar[m][0] > start:
+                r = m - 1
+            else:
+                l = m + 1
+        
+        if (l - 1 >= 0 and self.calendar[l - 1][1] > start) or (l < len(self.calendar) and self.calendar[l][0] < end):
+            return False
+        
+        self.calendar.insert(l, (start, end))
+
+        return True
         
 
 
