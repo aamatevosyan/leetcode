@@ -10,24 +10,23 @@ class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
-        
-        result = []
 
-        q = deque()
-        q.append((0, root))
+        level_order, q = [], deque([root])
 
         while q:
-            level, el = q.popleft()
+            level_order.append([])
+            curr = deque()
 
-            while len(result) < level + 1:
-                result.append([])
-            
-            result[level].append(el.val)
+            for node in q:
+                level_order[-1].append(node.val)
 
-            if el.left:
-                q.append((level + 1, el.left))
-            
-            if el.right:
-                q.append((level + 1, el.right))
+                if node.left:
+                    curr.append(node.left)
+                
+                if node.right:
+                    curr.append(node.right)
 
-        return result           
+            q = curr
+        
+        return level_order
+        
