@@ -1,5 +1,3 @@
-from collections import deque
-
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
@@ -9,8 +7,7 @@ from collections import deque
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        small, large = min(p.val, q.val), max(p.val, q.val)
-        curr = root
+        curr, small, large = root, min(p.val, q.val), max(p.val, q.val)
 
         while curr:
             if curr.val > large:
@@ -21,3 +18,5 @@ class Solution:
                 break
         
         return curr
+        
+        
