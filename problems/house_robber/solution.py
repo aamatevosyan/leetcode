@@ -1,11 +1,13 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        if not nums:
-            return 0
+        prev_no_robbed, prev_robbed = 0, 0
 
-        prev, curr = 0, nums[0]
+        for num in nums:
+            max_money = max(prev_no_robbed, prev_robbed)
 
-        for i in range(1, len(nums)):
-            prev, curr = curr, max(curr, prev + nums[i])
-
-        return curr
+            prev_robbed = prev_no_robbed + num
+            prev_no_robbed = max_money
+        
+        return max(prev_no_robbed, prev_robbed)
+            
+        
