@@ -11,24 +11,21 @@ class Solution:
         if not root:
             return []
         
-        q = deque()
-        result = []
-        q.append((0, root))
-
-        currentMax = -1
+        right_side_view, q = [], deque([root])
 
         while q:
-            level, node = q.popleft()
+            curr = deque([])
+            right_side_view.append(q[0].val)
 
-            if currentMax < level:
-                result.append(node.val)
-                currentMax = level
-            
-            if node.right:
-                q.append((level + 1, node.right))
-            
-            if node.left:
-                q.append((level + 1, node.left))
+            for node in q:
+                if node.right:
+                    curr.append(node.right)
                 
+                if node.left:
+                    curr.append(node.left)
+            
+            q = curr
+        
+        return right_side_view
 
-        return result
+        
