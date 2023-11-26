@@ -1,28 +1,14 @@
-from heapq import heappop, heappush
-
-class NumPair:
-    def __init__(self, num, count):
-        self.num = num
-        self.count = count
-
-    def __lt__(self, other):
-        return self.count > other.count
+from collections import Counter
 
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        numCount = defaultdict(int)
-        numHeap = []
+        num_count = list(Counter(nums).items())
+        
+        q = [(cnt, num) for num, cnt in num_count[:k]]
+        heapify(q)
 
-        for num in nums:
-            numCount[num] += 1
-
-        for num in numCount:
-            pair = NumPair(num, numCount[num])
-            heappush(numHeap, pair)
-
-        results = []
-
-        for i in range(k):
-            results.append(heappop(numHeap).num)
-
-        return results
+        for num, cnt in num_count[k:]:
+            heappushpop(q, (cnt, num))
+        
+        return [num for _, num in q]
+        
