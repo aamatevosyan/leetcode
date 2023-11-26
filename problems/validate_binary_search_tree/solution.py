@@ -5,24 +5,15 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def isValidNode(self, node: Optional[TreeNode], lower: int, upper: int) -> bool:
-        if not node:
-            return True
-        
-        val = node.val
-        if val <= lower or val >= upper:
-            return False
-        
-        if not self.isValidNode(node.left, lower, val):
-            return False
-        
-        if not self.isValidNode(node.right, val, upper):
-            return False
-        
-        return True
-        
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+    def is_valid(self, root: Optional[TreeNode], min_value: int, max_value: int) -> bool:
         if not root:
             return True
 
-        return self.isValidNode(root, float('-inf'), float('inf'))
+        if root.val <= min_value or root.val >= max_value:
+            return False
+        
+        return self.is_valid(root.left, min_value, root.val) and self.is_valid(root.right, root.val, max_value)
+
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        return self.is_valid(root, -math.inf, math.inf)
+        
