@@ -1,5 +1,3 @@
-from collections import deque
-
 """
 # Definition for a Node.
 class Node:
@@ -8,23 +6,27 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 """
 
+from typing import Optional
 class Solution:
-    def cloneGraph(self, node: 'Node') -> 'Node':
-        if not node:
-            return None
+    def clone(self, node: 'Node', cloned: Dict['Node', 'Node']):
+        clone = Node(node.val)
+        cloned[node] = clone
+
+        for it in node.neighbors:
+            if it not in cloned:
+                clone.neighbors.append(self.clone(it, cloned))
+            else:
+                clone.neighbors.append(cloned[it])
         
-        q = deque([node])
-        cloned = [None] * 101
-        cloned[node.val] = Node(val=node.val) 
+        return clone
 
-        while q:
-            _node = q.popleft()
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if not node:
+            return node
 
-            for child in _node.neighbors:
-                if cloned[child.val] is None:
-                    cloned[child.val] = Node(val=child.val)
-                    q.append(child)
+        if not node.neighbors:
+            return Node(node.val)
+        
+        cloned = {}
 
-                cloned[_node.val].neighbors.append(cloned[child.val])
-
-        return cloned[node.val]
+        return self.clone(node, cloned)
