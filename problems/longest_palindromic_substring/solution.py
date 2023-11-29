@@ -10,7 +10,7 @@ class Solution:
 
 
     def longestPalindrome(self, s: str) -> str:
-        l, r, max_len = 0, 0, 1
+        l, r, max_len = 0, 0, 0
 
         for i in range(len(s)):
             max_len, l, r = max(
