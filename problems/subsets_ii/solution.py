@@ -1,13 +1,4 @@
 class Solution:
-    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
-        nums.sort()
-
-        curr_set, result = [], []
-        
-        self.helper(0, nums, curr_set, result)
-
-        return result
-
     def helper(self, i: int, nums: List[int], curr_set: List[int], result: List[int]) -> None:
         if (i == len(nums)):
             result.append(curr_set[:])
@@ -21,4 +12,13 @@ class Solution:
             i += 1
 
         self.helper(i + 1, nums, curr_set, result)
+
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+
+        result = []
+        
+        self.helper(0, nums, [], result)
+
+        return result
         
