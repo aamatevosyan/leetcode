@@ -9,9 +9,6 @@ class Solution:
         if len(path) == k:
             res.append(path)
             return
-
-        if i > n:
-            return
         
         for j in range(i + 1, n + 1):
             self.helper(j, path + [j], res, n, k)
