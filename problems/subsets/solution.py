@@ -1,8 +1,8 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        curr_set, result = [], []
+        result = []
         
-        self.helper(0, nums, curr_set, result)
+        self.helper(0, nums, [], result)
 
         return result
     
