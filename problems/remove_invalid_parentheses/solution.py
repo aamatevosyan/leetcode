@@ -1,53 +1,37 @@
-from collections import deque
-
 class Solution:
-    def isParenthesis(self, c: str) -> bool:
-        return c in ('(', ')')
-    
-    def isValidString(self, s: str) -> bool:
+    def is_valid(self, s: str) -> bool:
         cnt = 0
+
         for c in s:
             if c == '(':
                 cnt += 1
             elif c == ')':
                 cnt -= 1
             
-            if cnt < 0 or cnt > (len(s) // 2):
-                return False
-        
+            if cnt < 0 or cnt * 2 > len(s):
+                return False 
+
         return cnt == 0
 
-    def removeInvalidParentheses(self, s: str) -> List[str]:
-        if len(s) == 0:
+    def backtrack(self, i: int, curr: str, s: str, result: Set[str]):
+        if i == len(s):
+            if self.is_valid(curr):
+                result.add(curr)
             return
         
-        visited = set()
-        q = deque()
-        result = []
-        found = False
+        self.backtrack(i + 1, curr + s[i], s, result)
 
-        q.append(s)
-        visited.add(str)
+        if s[i] in ('(', ')'):
+            self.backtrack(i + 1, curr[:i] + curr[i + 1:], s, result)
 
-        while q:
-            s = q.popleft()
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        result = set()
 
-            if self.isValidString(s):
-                result.append(s)
-                found = True
-            
-            if found:
-                continue
-            
-            for i in range(len(s)):
-                if not self.isParenthesis(s[i]):
-                    continue
-                
-                tmp = s[:i] + s[i + 1:]
+        self.backtrack(0, "", s, result)
 
-                if tmp not in visited:
-                    visited.add(tmp)
-                    q.append(tmp)
+        max_len = max(map(len, result))
+
+        return [item for item in result if len(item) == max_len]
+
+
         
-        return result
-                
