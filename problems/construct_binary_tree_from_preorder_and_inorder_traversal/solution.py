@@ -6,39 +6,37 @@
 #         self.right = right
 class Solution:
     def build(
-        self, 
-        preorder: List[int], 
-        inorder: List[int], 
-        inorderMap: Dict[str, int],
-        preLeft: int,
-        preRight: int,
-        inLeft: int,
-        inRight: int,
+        self,
+        inorder_map: Dict[int, int],
+        preorder: List[int], preorder_start: int, preorder_end: int, 
+        inorder: List[int], inorder_start: int, inorder_end: int
     ) -> Optional[TreeNode]:
-        if preLeft > preRight:
+        if preorder_start > preorder_end:
             return None
-        
-        rootVal = preorder[preLeft]
-        rootValInOrderIndex = inorderMap[rootVal]
-        leftSideLen = rootValInOrderIndex - inLeft
 
-        root = TreeNode()
-        root.val = rootVal
+        root = TreeNode(preorder[preorder_start])
+
+        inorder_root_ind = inorder_map[root.val]
+        left_size = inorder_root_ind - inorder_start
+
         root.left = self.build(
-            preorder, inorder, inorderMap, preLeft + 1, preLeft + leftSideLen, inLeft, rootValInOrderIndex - 1, 
+            inorder_map,
+            preorder, preorder_start + 1, preorder_start + left_size,
+            inorder, inorder_start, inorder_root_ind - 1,
         )
 
         root.right = self.build(
-            preorder, inorder, inorderMap, preLeft + 1 + leftSideLen, preRight, rootValInOrderIndex + 1, inRight, 
+            inorder_map,
+            preorder, preorder_start + left_size + 1, preorder_end,
+            inorder, inorder_root_ind + 1, inorder_end
         )
 
         return root
 
-
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        inorderMap = {}
-
-        for i, v in enumerate(inorder):
-            inorderMap[v] = i
-
-        return self.build(preorder, inorder, inorderMap, 0, len(preorder) - 1, 0, len(inorder) - 1)
+        return self.build(
+            { num: i for i, num in enumerate(inorder) },
+            preorder, 0, len(preorder) - 1,
+            inorder, 0, len(inorder) - 1
+        )
+        
