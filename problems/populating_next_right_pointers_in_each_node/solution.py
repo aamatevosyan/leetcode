@@ -9,25 +9,19 @@ class Node:
 """
 
 class Solution:
-    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+    def helper(self, p: 'Node', q: 'Node'):
+        if not p or not q:
+            return
+
+        p.next = q
+        self.helper(p.left, p.right)
+        self.helper(q.left, q.right)
+        self.helper(p.right, q.left)
+
+    def connect(self, root: 'Node') -> 'Node':
         if not root:
             return root
-
-        q, right_most = deque([root]), root
-
-        while q:
-            right_most, n = None, len(q)
-
-            for _ in range(n):
-                node = q.popleft()
-                
-                node.next = right_most
-                right_most = node
-
-                if node.right:
-                    q.append(node.right)
-                
-                if node.left:
-                    q.append(node.left)
+        
+        self.helper(root.left, root.right)
 
         return root
