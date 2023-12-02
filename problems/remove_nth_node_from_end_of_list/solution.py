@@ -4,26 +4,23 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        _len = 0
+    def findFromEnd(self, head: ListNode, k: int) -> ListNode:
         curr = head
 
+        for _ in range(k):
+            curr = curr.next
+        
+        end = head
         while curr:
-            _len += 1
+            end = end.next
             curr = curr.next
         
-        curr, prev = head, None
-        k, i = _len - n + 1, 1
-
-        while curr and curr.next and i < k:
-            prev = curr
-            curr = curr.next
-            i += 1
-
-        if not prev:
-            head = head.next
-        else:
-            prev.next = curr.next
+        return end
         
-        return head
-        
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy = ListNode(next=head)
+
+        x = self.findFromEnd(dummy, n + 1)
+        x.next = x.next.next
+
+        return dummy.next
