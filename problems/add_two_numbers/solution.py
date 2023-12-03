@@ -4,69 +4,24 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def reverse(self, head: Optional[ListNode]):
-        cur, prev = head, None
-
-        while cur:
-            next = cur.next
-            cur.next = prev
-            prev = cur
-            cur = next
-        
-        return prev
-
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        r1, r2 = l1, l2
+        curr = dummy = ListNode()
+        carry = 0
 
-        divider, current = 0, 0
+        while l1 or l2 or carry:
+            total = carry
+            
+            if l1:
+                total += l1.val
+                l1 = l1.next
+            
+            if l2:
+                total += l2.val
+                l2 = l2.next
+            
+            carry, total = divmod(total, 10)
+            curr.next = ListNode(total)
+            curr = curr.next
 
-        head = ListNode(0)
-        result = head
-
-        while r1 and r2:
-            local_sum = r1.val + r2.val + divider
-
-            reminder = local_sum % 10
-            divider = local_sum // 10
-
-            tmp = ListNode(reminder)
-            head.next = tmp
-
-            head = tmp
-
-            r1 = r1.next
-            r2 = r2.next
-
-        while r1:
-            local_sum = r1.val + divider
-
-            reminder = local_sum % 10
-            divider = local_sum // 10
-
-            tmp = ListNode(reminder)
-            head.next = tmp
-
-            head = tmp
-            r1 = r1.next
-
-        while r2:
-            local_sum = r2.val + divider
-
-            reminder = local_sum % 10
-            divider = local_sum // 10
-
-            tmp = ListNode(reminder)
-            head.next = tmp
-
-            head = tmp
-            r2 = r2.next
+        return dummy.next
         
-        if divider > 0:
-            tmp = ListNode(divider)
-            head.next = tmp
-
-            head = tmp
-        
-        return result.next
-        
-
