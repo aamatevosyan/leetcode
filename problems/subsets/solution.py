@@ -1,21 +1,25 @@
 class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        result = []
-        
-        self.helper(0, nums, [], result)
+        self.backtrack(nums, 0)
 
-        return result
+        return self.result
     
-    def helper(self, i: int, nums: List[int], curr_set: List[int], result: List[int]) -> None:
-        if (i == len(nums)):
-            result.append(curr_set[:])
-            return
-        
-        curr_set.append(nums[i])
-        self.helper(i + 1, nums, curr_set, result)
-        curr_set.pop()
+    def backtrack(self, nums: List[int], start: int) -> None:
+        self.result.append(self.path[:])
 
-        self.helper(i + 1, nums, curr_set, result)
+        if len(nums) == start:
+            return
+
+        for i in range(start, len(nums)):
+            self.path.append(nums[i])
+
+            self.backtrack(nums, i + 1)
+            
+            self.path.pop()
 
 
         
