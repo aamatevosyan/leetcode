@@ -1,24 +1,25 @@
 class Solution:
-    def helper(self, i: int, nums: List[int], curr_set: List[int], result: List[int]) -> None:
-        if (i == len(nums)):
-            result.append(curr_set[:])
-            return
-        
-        curr_set.append(nums[i])
-        self.helper(i + 1, nums, curr_set, result)
-        curr_set.pop()
-
-        while i + 1 < len(nums) and nums[i] == nums[i + 1]:
-            i += 1
-
-        self.helper(i + 1, nums, curr_set, result)
+    def __init__(self):
+        self.result = []
+        self.path = []
 
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
+        self.backtrack(nums, 0)
 
-        result = []
-        
-        self.helper(0, nums, [], result)
+        return self.result
+    
+    def backtrack(self, nums: List[int], start: int) -> None:
+        self.result.append(self.path[:])
 
-        return result
+        if len(nums) == start:
+            return
+
+        for i in range(start, len(nums)):
+            if i > start and nums[i] == nums[i - 1]:
+                continue
+
+            self.path.append(nums[i])
+            self.backtrack(nums, i + 1)
+            self.path.pop()
         
