@@ -6,18 +6,24 @@
 #         self.right = right
 class Solution:
     def __init__(self):
-        self.answer = 0
+        self.diameter = 0
 
-    def getEdgeCount(self, root: Optional[TreeNode]) -> int:
-        if root is None:
+    def getHeight(self, root: Optional[TreeNode]) -> int:
+        if not root:
             return 0
+        
+        left_height = self.getHeight(root.left)
+        right_height = self.getHeight(root.right)
 
-        left, right = self.getEdgeCount(root.left), self.getEdgeCount(root.right)
+        diameter = left_height + right_height
 
-        self.answer = max(self.answer, left + right)
-
-        return 1 + max(left, right)
+        if diameter > self.diameter:
+            self.diameter = diameter
+        
+        return 1 + max(left_height, right_height)
 
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        self.getEdgeCount(root)
-        return self.answer
+        self.getHeight(root)
+
+        return self.diameter
+        
