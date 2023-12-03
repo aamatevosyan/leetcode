@@ -1,19 +1,30 @@
 class Solution:
-    def helper(self, i: int, nums: List[int], perm: List[int], result: List[List[int]]) -> None:
-        if len(perm) == len(nums):
-            result.append(perm)
+    def __init__(self):
+        self.result = []
+        self.used = []
+        self.path = []
+
+    def backtrack(self, nums: List[int]) -> None:
+        if len(self.path) == len(nums):
+            self.result.append(self.path[:])
             return
         
-        for j in range(len(perm) + 1):
-            perm_copy = perm[:]
-            perm_copy.insert(j, nums[i])
-            self.helper(i + 1, nums, perm_copy, result)
+        for i, num in enumerate(nums):
+            if self.used[i]:
+                continue
+            
+            self.used[i] = True
+            self.path.append(num)
+
+            self.backtrack(nums)
+
+            self.used[i] = False
+            self.path.pop()
 
     def permute(self, nums: List[int]) -> List[List[int]]:
-        result = []
-        
-        self.helper(0, nums, [], result)
+        self.used = [False] * len(nums)
+        self.backtrack(nums)
 
-        return result
+        return self.result
     
         
