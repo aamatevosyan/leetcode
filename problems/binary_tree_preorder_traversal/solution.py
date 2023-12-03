@@ -5,17 +5,18 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        curr, st = root, []
-        preorder = []
+    def __init__(self):
+        self.result = []
 
-        while curr or st:
-            if curr:
-                preorder.append(curr.val)
-                if curr.right:
-                    st.append(curr.right)
-                curr = curr.left
-            else:
-                curr = st.pop()
+    def traverse(self, root: Optional[TreeNode]):
+        if not root:
+            return
         
-        return preorder
+        self.result.append(root.val)
+        self.traverse(root.left)
+        self.traverse(root.right)
+
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        self.traverse(root)
+
+        return self.result
