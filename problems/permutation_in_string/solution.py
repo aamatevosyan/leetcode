@@ -1,28 +1,30 @@
-from collections import defaultdict
-
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        if len(s1) > len(s2):
-            return False
+        l, valid, need, window = 0, 0, defaultdict(int), defaultdict(int)
 
-        s1Count = defaultdict(int)
         for c in s1:
-            s1Count[c] += 1
+            need[c] += 1
+        
+        for r, c in enumerate(s2):
+            if c in need:
+                window[c] += 1
 
-        localCount = defaultdict(int)
-
-        start = 0
-        for end in range(len(s2)):
-            endChar = s2[end]
-            localCount[endChar] += 1
-
-            if end - start + 1 == len(s1):
-                if localCount == s1Count:
+                if window[c] == need[c]:
+                    valid += 1
+            
+            if r - l + 1 >= len(s1):
+                if valid == len(need):
                     return True
+                
+                d = s2[l]
+                l += 1
 
-                localCount[s2[start]] -= 1
+                if d in need:
+                    if window[d] == need[d]:
+                        valid -= 1
 
-                if localCount[s2[start]] == 0:
-                    localCount.pop(s2[start])
+                    window[d] -= 1 
+        
+        return False
 
-                start += 1
+        
