@@ -1,12 +1,12 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        dp = [1] * n
+        seq = []
 
-        for i in range(n):
-            for j in range(i):
-                if nums[i] > nums[j] and dp[i] < dp[j] + 1:
-                    dp[i] = dp[j] + 1
-        
-        return max(dp)
-        
+        for num in nums:
+            if len(seq) == 0 or seq[-1] < num:
+                seq.append(num)
+            else:
+                ind = bisect_left(seq, num)
+                seq[ind] = num
+
+        return len(seq)
