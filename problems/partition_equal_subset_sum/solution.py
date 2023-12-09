@@ -1,23 +1,13 @@
 class Solution:
-    def canParitionTarget(self, nums: List[int], target: int):
-        dp = [False] * (target + 1)
-        dp[0] = True
+    def canPartitionTarget(self, nums: List[int], target: int) -> bool:
+        dp = [True] + [False] * target
 
         for i in range(len(nums)):
-            curr = [False] * (target + 1)
-
-            for j in range(1, target + 1):
-                exclude = dp[j]
-                include = False
-                
-                if j - nums[i] >= 0:
-                    include = dp[j - nums[i]]
-
-                curr[j] = exclude or include
-
-            dp = curr
+            for j in range(target, 0, -1):
+                if j - nums[i] >= 0 and dp[j - nums[i]]:
+                    dp[j] = True
         
-        return curr[target]
+        return dp[target]
 
     def canPartition(self, nums: List[int]) -> bool:
         total = sum(nums)
@@ -25,5 +15,4 @@ class Solution:
         if total & 1:
             return False
         
-        return self.canParitionTarget(nums, total >> 1)
-        
+        return self.canPartitionTarget(nums, total >> 1)
