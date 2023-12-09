@@ -15,13 +15,13 @@ class Solution:
         while min_heap:
             d, u = heappop(min_heap)
 
-            if dist[u] != 0:
-                continue
+            if u == end_node:
+                return d * -1
             
             dist[u] = d * -1
             
             for v, w in graph[u]:
-                if dist[v] != 0:
+                if -d * w <= dist[v]:
                     continue
                 
                 heappush(min_heap, (d * w, v))
