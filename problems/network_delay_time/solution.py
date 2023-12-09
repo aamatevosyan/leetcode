@@ -1,5 +1,3 @@
-from heapq import heappush, heappop
-
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         graph = [[] for _ in range(n)]
@@ -24,8 +22,4 @@ class Solution:
                 
                 heappush(min_heap, (d + w, v))
         
-        if min(dist) == -1:
-            return -1
-        
-        return max(dist)
-        
+        return -1 if -1 in dist else max(dist) 
