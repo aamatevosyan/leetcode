@@ -1,5 +1,3 @@
-from heapq import heappush
-
 class Solution:
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
         n, m = len(heights), len(heights[0])
@@ -27,4 +25,3 @@ class Solution:
                 heappush(q, (_e, _i, _j))
         
         return max_effort
-        
