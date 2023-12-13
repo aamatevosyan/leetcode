@@ -13,35 +13,31 @@ class Solution:
         
         n, m = len(grid), len(grid[0])
         q = deque()
-        visited = set()
 
         for i in range(n):
             for j in range(m):
                 if grid[i][j] == self.ROTTEN:
                     q.append((i, j))
-                    visited.add((i, j))
+                    grid[i][j] = self.EMPTY
         
-        result = -1
+        result = 0
 
         while q:
-            curr = deque([])
-            result += 1
+            for _ in range(len(q)):
+                i, j = q.popleft()
 
-            for i, j in q:
                 for di, dj in self.DIRECTIONS:
                     _i, _j = di + i, dj + j
 
-                    if _i >= 0 and _i < n and _j >= 0 and _j < m and grid[_i][_j] == self.FRESH and not (_i, _j) in visited:
-                        visited.add((_i, _j))
-                        grid[_i][_j] = self.ROTTEN
-
-                        curr.append((_i, _j))
-
-            q = curr
+                    if _i >= 0 and _i < n and _j >= 0 and _j < m and grid[_i][_j] == self.FRESH:
+                        grid[_i][_j] = self.EMPTY
+                        q.append((_i, _j))
+            
+            result += 1
         
         for i in range(n):
             for j in range(m):
                 if grid[i][j] == self.FRESH:
                     return -1
 
-        return result if result != -1 else 0
+        return result - 1 if result > 0 else 0
